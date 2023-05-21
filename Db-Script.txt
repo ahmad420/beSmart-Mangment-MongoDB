@@ -1,0 +1,71 @@
+beSmart-Mangment-MongoDB
+
+use beSmartMangment
+
+db.createCollection("products")
+db.createCollection("suppliers")
+db.createCollection("warehouses")
+db.createCollection("stocks")
+db.createCollection("shelfs")
+
+
+{
+  "database": "beSmart Management",
+  "collections": [
+    {
+      "name": "products",
+      "fields": [
+        { "name": "productID", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "description", "type": "string" },
+        { "name": "category", "type": "string" },
+        { "name": "manufacturer", "type": "string" },
+        { "name": "price", "type": "number" },
+        { "name": "quantity", "type": "number" },
+        { "name": "unitOfMeasurement", "type": "string" }
+      ]
+    },
+    {
+      "name": "suppliers",
+      "fields": [
+        { "name": "supplierID", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "contactPerson", "type": "string" },
+        { "name": "email", "type": "string" },
+        { "name": "phone", "type": "string" },
+        { "name": "address", "type": "string" }
+      ]
+    },
+    {
+      "name": "warehouses",
+      "fields": [
+        { "name": "warehouseID", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "location", "type": "string" },
+        { "name": "capacity", "type": "number" },
+        { "name": "manager", "type": "string" }
+      ]
+    },
+    {
+      "name": "stocks",
+      "fields": [
+        { "name": "stockID", "type": "string" },
+        { "name": "productID", "type": "string" },
+        { "name": "warehouseID", "type": "string" },
+        { "name": "quantity", "type": "number" },
+        { "name": "minStockLevel", "type": "number" },
+        { "name": "reorderQuantity", "type": "number" }
+      ]
+    },
+    {
+      "name": "shelfs",
+      "fields": [
+        { "name": "shelfID", "type": "string" },
+        { "name": "warehouseID", "type": "string" },
+        { "name": "capacity", "type": "number" },
+        { "name": "currentCapacity", "type": "number" },
+        { "name": "description", "type": "string" }
+      ]
+    }
+  ]
+}
