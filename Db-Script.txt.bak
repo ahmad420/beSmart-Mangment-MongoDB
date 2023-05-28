@@ -180,46 +180,19 @@ db.Rack.insertMany([
 
 db.Shelve.insertMany([
   { 
-	ShelveId: 1,
-	number:"[0,0]",
-	RackId: 11,
+	ShelveId: 11,
+	name:"Rack A",
+	DepartmentId: 4,
   },
    { 
-	ShelveId: 2,
-	number:"[0,2]",
-	RackId: 11,
+	ShelveId: 12,
+	name:"Rack B",
+	DepartmentId: 4,
   },
    { 
-	ShelveId: 3,
-	number:"[0,3]",
-	RackId: 11,
-  }
-])
-
-db.Product.insertMany([
-  { 
-	ProductId: 1,
-	barcode:"9781234564547",
-	quantity:30,
-	price:70,
-	weight:0.6,
-	ShelveId: 1,
-  },
-   { 
-	ProductId: 2,
-	barcode:"9781234566717",
-	quantity:10,
-	price:200,
-	weight:0.3,
-	ShelveId: 2,
-  },
-   { 
-	ProductId: 3,
-	barcode:"9781234567890",
-	quantity:20,
-	price:30,
-	weight:0.2,
-	ShelveId: 3,
+	ShelveId: 13,
+	name:"Rack C",
+	DepartmentId: 4,
   }
 ])
 
