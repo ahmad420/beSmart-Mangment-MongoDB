@@ -24,6 +24,9 @@ db.createCollection("Client")
 
 show collections  
 
+
+******Data Inesrtion into collections******
+
 db.Warehouse.insertMany([
   {
     WarehouseId: 1,
@@ -1006,3 +1009,151 @@ db.Package.insertMany([
     status: "processing"
   }
 ]);
+
+
+******* Functions Using JSON *******
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+****** Updates *******
+
+// Update the name of a warehouse
+db.Warehouse.updateOne(
+  { WarehouseId: 1 },
+  { $set: { name: "New Warehouse Name" } }
+);
+
+
+// Update the status of all active departments to "inactive"
+db.Department.updateMany(
+  { status: "active" },
+  { $set: { status: "inactive" } }
+);
+
+
+// Update the weight of a specific product
+db.Product.updateOne(
+  { ProductId: 1 },
+  { $set: { weight: 6.0 } }
+);
+
+
+
+// Define the new product document
+var newProduct = {
+  ProductId: 8,
+  barcode: "32453145235323",
+  name: "קרם לחות לפנים - מעודכן",
+  weight: 0.2,
+  category: "קוסמטיקה מעודכנת",
+  description: "קרם לחות איכותי להרגעת עור מעודכן",
+  price: 60,
+  status: "active - מעודכן",
+  stockid: 4
+};
+
+// Insert the new product document into the Product collection
+db.Product.insertOne(newProduct);
+
+print("New product added successfully");
+
+
+
+//update a worker position to supervisor 
+
+const workerIdToUpdate = 8; 
+
+// Check if the worker with the specified workerId is already a supervisor
+const worker = db.Workers.findOne({ workerId: workerIdToUpdate });
+
+if (worker) {
+  if (worker.position !== "supervisor") {
+    // Worker is not a supervisor, update to the supervisor position
+    db.Workers.updateOne(
+      { workerId: workerIdToUpdate },
+      {
+        $set: { position: "supervisor" }
+      }
+    );
+    print("Worker's position updated to supervisor");
+  } else {
+    print("Worker is already a supervisor");
+  }
+} else {
+  print("Worker with the specified workerId does not exist");
+}
+
+
+
+*******Deletions********
+
+// Delete a specific worker
+db.Worker.deleteOne({ WorkerId: 1 });
+
+
+// Delete all products with a specific category
+db.Product.deleteMany({ category: "קוסמטיקה" });
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
