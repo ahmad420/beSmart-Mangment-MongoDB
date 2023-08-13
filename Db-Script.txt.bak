@@ -16,8 +16,6 @@ db.createCollection("Package")
 
 db.createCollection("Stock")
 
-db.createCollection("Supervisor")
-
 db.createCollection("Worker")
 
 db.createCollection("Supplier")
@@ -26,173 +24,921 @@ db.createCollection("Client")
 
 show collections  
 
-
 db.Warehouse.insertMany([
   {
-	WarehouseId: 1,
-    name: "Warehouse A",
-    location: "New York",
-    capacity: 1000
+    WarehouseId: 1,
+    name: "מחסן היבואים",
+    location: "תל אביב"
   },
   {
-   WarehouseId: 2,
-    name: "Warehouse B",
-    location: "London",
-    capacity: 1500
+    WarehouseId: 2,
+    name: "מחסן הציוד",
+    location: "חיפה"
   },
   {
-   WarehouseId: 3,
-    name: "Warehouse C",
-    location: "Tokyo",
-    capacity: 1200
+    WarehouseId: 3,
+    name: "מחסן המזון",
+    location: "ירושלים"
   }
-])
+]);
+
 
 db.Department.insertMany([
-  { 
-	DepartmentId: 1,
-	name:"Department A",
-	WarehouseId: 1,
+  {
+    DepartmentId: 1,
+    DepartmentName: "מחלקת מכירות",
+    manager: "אלישע כהן",
+	workersCount: 24,
+    size: 200,
+    status: "active",
+    WarehouseId: 1
   },
-   { 
-	DepartmentId: 2,
-	name:"Department B",
-	WarehouseId: 1,
+  {
+    DepartmentId: 2,
+    DepartmentName: "מחלקת פיתוח",
+    manager: "רועי לוי",
+	workersCount: 30,
+    size: 325,
+    status: "active",
+    WarehouseId: 2
   },
-   { 
-	DepartmentId: 3,
-	name:"Department A",
-	WarehouseId: 3,
+  {
+    DepartmentId: 3,
+    DepartmentName: "מחלקת פיננסים",
+    manager: "מיכאל כהן",
+	workersCount: 15,
+    size: 200,
+    status: "inactive",
+    WarehouseId: 1
   },
-   { 
-	DepartmentId: 4,
-	name:"Department D",
-	WarehouseId: 2,
+  {
+    DepartmentId: 4,
+    DepartmentName: "מחלקת איכות",
+    manager: "שרית כהן",
+	workersCount: 43,
+    size: 400,
+    status: "active",
+    WarehouseId: 1
   },
-     { 
-	DepartmentId: 5,
-	name:"Department C",
-	WarehouseId: 2,
+  {
+    DepartmentId: 5,
+    DepartmentName: "מחלקת שיווק",
+    manager: "דנה לוי",
+	workersCount: 65,
+    size: 350,
+    status: "active",
+    WarehouseId: 2
   },
-])
+  {
+    DepartmentId: 6,
+    DepartmentName: "מחלקת הנדסה",
+    manager: "עמית כהן",
+	workersCount: 87,
+    size: 600,
+    status: "active",
+    WarehouseId: 3
+  },
+  {
+    DepartmentId: 7,
+    DepartmentName: "מחלקת משאבי אנוש",
+    manager: "רחל לוי",
+	workersCount: 14,
+    size: 200,
+    status: "inactive",
+    WarehouseId: 3
+  },
+  {
+    DepartmentId: 8,
+    DepartmentName: "מחלקת IT",
+    manager: "יוסי כהן",
+	workersCount: 65,
+    size: 250,
+    status: "active",
+    WarehouseId: 2
+  },
+  {
+    DepartmentId: 9,
+    DepartmentName: "מחלקת תפעול",
+    manager: "משה לוי",
+	workersCount: 157,
+    size: 5480,
+    status: "active",
+    WarehouseId: 3
+  },
+  {
+    DepartmentId: 10,
+    DepartmentName: "מחלקת מחקר ופיתוח",
+    manager: "רחל כהן",
+	workersCount: 20,
+    size: 380,
+    status: "active",
+    WarehouseId: 1
+  },
+  
+]);
+
+
+
 
 db.Rack.insertMany([
-  { 
-	RackId: 1,
-	name:"Department A",
-	DepartmentId: 1,
+  {
+    RackId: 1,
+    number: "ראק 101",
+    barcode: "123456789",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 2,
-	name:"Department B",
-	DepartmentId: 1,
+  {
+    RackId: 2,
+    number: "ראק 102",
+    barcode: "987654321",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 3,
-	name:"Department A",
-	DepartmentId: 1,
+  {
+    RackId: 3,
+    number: "ראק 103",
+    barcode: "567890123",
+    location_description: "אמצע",
+    DepartmentId: 9
   },
-   { 
-	RackId: 4,
-	name:"Department D",
-	DepartmentId: 1,
+  {
+    RackId: 4,
+    number: "ראק 104",
+    barcode: "456123789",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
   },
-     { 
-	RackId: 5,
-	name:"Department C",
-	DepartmentId: 1,
+  {
+    RackId: 5,
+    number: "ראק 105",
+    barcode: "789321456",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   },
-])
-
-db.Rack.insertMany([
-  { 
-	RackId: 1,
-	name:"Rack A",
-	DepartmentId: 1,
+  {
+    RackId: 6,
+    number: "ראק 106",
+    barcode: "654789321",
+    location_description: "אמצע",
+    DepartmentId: 9
   },
-   { 
-	RackId: 2,
-	name:"Rack B",
-	DepartmentId: 1,
+  {
+    RackId: 7,
+    number: "ראק 107",
+    barcode: "321456789",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 3,
-	name:"Rack C",
-	DepartmentId: 1,
+  {
+    RackId: 8,
+    number: "ראק 108",
+    barcode: "789654321",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 4,
-	name:"Rack D",
-	DepartmentId: 1,
+  {
+    RackId: 9,
+    number: "ראק 109",
+    barcode: "456789123",
+    location_description: "אמצע",
+    DepartmentId: 9
   },
-     { 
-	RackId: 5,
-	name:"Rack E",
-	DepartmentId: 1,
+  {
+    RackId: 10,
+    number: "ראק 110",
+    barcode: "123321789",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
   },
-])
-
-db.Rack.insertMany([
-  { 
-	RackId: 6,
-	name:"Rack A",
-	DepartmentId: 3,
+  {
+    RackId: 11,
+    number: "ראק 111",
+    barcode: "789123321",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 7,
-	name:"Rack B",
-	DepartmentId: 3,
+  {
+    RackId: 12,
+    number: "ראק 112",
+    barcode: "321789123",
+    location_description: "אמצע",
+    DepartmentId: 9
   },
-   { 
-	RackId: 8,
-	name:"Rack C",
-	DepartmentId: 3,
+  {
+    RackId: 13,
+    number: "ראק 113",
+    barcode: "987123456",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 9,
-	name:"Rack D",
-	DepartmentId: 3,
+  {
+    RackId: 14,
+    number: "ראק 114",
+    barcode: "123987456",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   },
-     { 
-	RackId: 10,
-	name:"Rack C",
-	DepartmentId: 3,
+  {
+    RackId: 15,
+    number: "ראק 115",
+    barcode: "456789321",
+    location_description: "אמצע",
+    DepartmentId: 9
   },
-])
-db.Rack.insertMany([
-  { 
-	RackId: 11,
-	name:"Rack A",
-	DepartmentId: 4,
+  {
+    RackId: 16,
+    number: "ראק 116",
+    barcode: "654789123",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 12,
-	name:"Rack B",
-	DepartmentId: 4,
+  {
+    RackId: 17,
+    number: "ראק 117",
+    barcode: "123789456",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   },
-   { 
-	RackId: 13,
-	name:"Rack C",
-	DepartmentId: 4,
+  {
+    RackId: 18,
+    number: "ראק 118",
+    barcode: "789456123",
+    location_description: "אמצע",
+    DepartmentId: 9
+  },
+  {
+    RackId: 19,
+    number: "ראק 119",
+    barcode: "456123789",
+    location_description: "פינה שמאלית",
+    DepartmentId: 9
+  },
+  {
+    RackId: 20,
+    number: "ראק 120",
+    barcode: "789321456",
+    location_description: "פינה ימנית",
+    DepartmentId: 9
   }
-])
+]);
 
 
-db.Shelve.insertMany([
-  { 
-	ShelveId: 11,
-	name:"Rack A",
-	DepartmentId: 4,
+// Shelf documents for RackId: 1
+db.Shelf.insertMany([
+
+  {
+    ShelveId: 1,
+    number: "מדף 1",
+    shelve_barcode: "111111",
+    location_description: "פינה עליונה",
+    max_weight: 50,
+    height: 40,
+    width: 80,
+    status: "יש מקום",
+    RackId: 1
   },
-   { 
-	ShelveId: 12,
-	name:"Rack B",
-	DepartmentId: 4,
+  {
+    ShelveId: 2,
+    number: "מדף 2",
+    shelve_barcode: "222222",
+    location_description: "אמצע",
+    max_weight: 40,
+    height: 40,
+    width: 80,
+    status: "יש מקום",
+    RackId: 1
   },
-   { 
-	ShelveId: 13,
-	name:"Rack C",
-	DepartmentId: 4,
+  {
+    ShelveId: 3,
+    number: "מדף 3",
+    shelve_barcode: "333333",
+    location_description: "פינה תחתונה",
+    max_weight: 60,
+    height: 40,
+    width: 80,
+    status: "מלא",
+    RackId: 1
+  },
+  {
+    ShelveId: 4,
+    number: "מדף 4",
+    shelve_barcode: "444444",
+    location_description: "פינה ימנית",
+    max_weight: 55,
+    height: 40,
+    width: 80,
+    status: "מלא",
+    RackId: 1
+  },
+  {
+    ShelveId: 5,
+    number: "מדף 5",
+    shelve_barcode: "555555",
+    location_description: "פינה שמאלית",
+    max_weight: 45,
+    height: 40,
+    width: 80,
+    status: "מלא",
+    RackId: 1
   }
-])
+]);
 
+
+
+// Define the Shelf collection and insert more documents for RackId: 2
+db.Shelf.insertMany([
+
+  {
+    ShelveId: 5,
+    number: "מדף 1",
+    shelve_barcode: "555555",
+    location_description: "פינה תחתונה",
+    max_weight: 70,
+    height: 25,
+    width: 90,
+    status: "יש מקום",
+    RackId: 2
+  },
+  {
+    ShelveId: 6,
+    number: "מדף 2",
+    shelve_barcode: "666666",
+    location_description: "פינה עליונה",
+    max_weight: 55,
+    height: 25,
+    width: 90,
+    status: "יש מקום",
+    RackId: 2
+  },
+  {
+    ShelveId: 7,
+    number: "מדף 3",
+    shelve_barcode: "777777",
+    location_description: "אמצע",
+    max_weight: 45,
+    height: 25,
+    width: 90,
+    status: "יש מקום",
+    RackId: 2
+  },
+  {
+    ShelveId: 8,
+    number: "מדף 4",
+    shelve_barcode: "888888",
+    location_description: "פינה תחתונה",
+    max_weight: 65,
+    height: 35,
+    width: 110,
+    status: "יש מקום",
+    RackId: 2
+  }
+
+]);
+
+// Shelf documents for RackId: 15
+
+db.Shelf.insertMany([
+  
+  {
+    ShelveId: 21,
+    number: "מדף 1",
+    shelve_barcode: "211111",
+    location_description: "פינה עליונה",
+    max_weight: 500,
+    height: 200,
+    width: 150,
+    status: "יש מקום",
+    RackId: 15
+  },
+  {
+    ShelveId: 22,
+    number: "מדף 2",
+    shelve_barcode: "222222",
+    location_description: "אמצע",
+    max_weight: 400,
+    height: 200,
+    width: 100,
+    status: "מלא",
+    RackId: 15
+  }
+]);
+
+
+-----------------------------------------------
+
+db.Product.insertMany([
+  {
+    ProductId: 1,
+    barcode: "123456789",
+    name: "מכונת קפה אוטומטית",
+    weight: 5.2,
+    category: "מטבח",
+    description: "מכונת קפה אוטומטית להכנת קפה טעים",
+    price: 1200,
+    status: "active",
+    stockid: 1
+  },
+  {
+    ProductId: 2,
+    barcode: "987654321",
+    name: "שמלת ערב נפלאה",
+    weight: 0.8,
+    category: "בגדים",
+    description: "שמלת ערב מרהיבה לאירועים מיוחדים",
+    price: 350,
+    status: "active",
+    stockid: 2
+  },
+  {
+    ProductId: 3,
+    barcode: "111222333",
+    name: "סט מקולקציית כלי עבודה",
+    weight: 2.0,
+    category: "כלי עבודה",
+    description: "סט מקולקציית כלי עבודה כולל מברג, מסמרות ועוד",
+    price: 120,
+    status: "active",
+    stockid: 1
+  },
+  {
+    ProductId: 4,
+    barcode: "444555666",
+    name: "גיטרת אקוסטית מקצועית",
+    weight: 1.5,
+    category: "כלי נגינה",
+    description: "גיטרה אקוסטית מקצועית לנגינה בכל הזמנים",
+    price: 600,
+    status: "active",
+    stockid: 3
+  },
+  {
+    ProductId: 5,
+    barcode: "777888999",
+    name: "ספר 'המרד השלישי'",
+    weight: 0.6,
+    category: "ספרים",
+    description: "ספר מרתק שמתאר את המרד השלישי בצרפת",
+    price: 45,
+    status: "active",
+    stockid: 2
+  },
+  {
+    ProductId: 6,
+    barcode: "101112131",
+    name: "פאזל 1000 חלקים",
+    weight: 0.3,
+    category: "צעצועים",
+    description: "פאזל מאתגר עם 1000 חלקים להנאת הכלבים",
+    price: 70,
+    status: "active",
+    stockid: 1
+  },
+  {
+    ProductId: 7,
+    barcode: "181920212",
+    name: "מסיכת פנים משומנת",
+    weight: 0.1,
+    category: "קוסמטיקה",
+    description: "מסיכת פנים משומנת לניקוי יסודי והרגעת העור",
+    price: 25,
+    status: "active",
+    stockid: 3
+  },
+  {
+    ProductId: 8,
+    barcode: "181920212",
+    name: "קרם לחות לפנים",
+    weight: 0.1,
+    category: "קוסמטיקה",
+    description: "קרם לחות איכותי להרגעת העור",
+    price: 50,
+    status: "active",
+    stockid: 3
+  },
+  {
+    ProductId: 9,
+    barcode: "222333444",
+    name: "סט סכינים מקצועי",
+    weight: 1.2,
+    category: "כלים",
+    description: "סט סכינים מקצועי למטבח",
+    price: 180,
+    status: "active",
+    stockid: 1
+  },
+  {
+    ProductId: 10,
+    barcode: "555666777",
+    name: "מחשב נייד מתקדם",
+    weight: 1.8,
+    category: "מחשבים",
+    description: "מחשב נייד מתקדם עם תצוגה ברורה ויעילה",
+    price: 1500,
+    status: "active",
+    stockid: 2
+  }
+]);
+
+------------------------------------------------------
+
+
+db.Worker.insertMany([
+  {
+    WorkerId: 1,
+    ID_number: "123456789",
+    first_name: "ישראל",
+    last_name: "כהן",
+    phone_number: "0501234567",
+    email: "israel@example.com",
+    encrypted_password: "encrypted123",
+    birth_date: new Date("1990-01-15"),
+    joining_date: new Date("2020-03-10"),
+    monthly_salary: 8000,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 9
+  },
+  {
+    WorkerId: 2,
+    ID_number: "987654321",
+    first_name: "שרה",
+    last_name: "לוי",
+    phone_number: "0529876543",
+    email: "sara@example.com",
+    encrypted_password: "encrypted456", 
+    birth_date: new Date("1985-05-20"),
+    joining_date: new Date("2018-07-01"),
+    monthly_salary: 9500,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 8
+  },
+  {
+    WorkerId: 3,
+    ID_number: "111222333",
+    first_name: "אברהם",
+    last_name: "כהן",
+    phone_number: "0541112222",
+    email: "avraham@example.com",
+    encrypted_password: "encrypted789",
+    birth_date: new Date("1988-10-03"),
+    joining_date: new Date("2019-02-18"),
+    monthly_salary: 8500,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 5
+  },
+  {
+    WorkerId: 4,
+    ID_number: "444555666",
+    first_name: "רחל",
+    last_name: "לוי",
+    phone_number: "0524445555",
+    email: "rachel@example.com",
+    encrypted_password: "encrypted012", 
+    birth_date: new Date("1992-09-25"),
+    joining_date: new Date("2021-01-05"),
+    monthly_salary: 8800,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 4
+  },
+  {
+    WorkerId: 5,
+    ID_number: "777888999",
+    first_name: "דניאל",
+    last_name: "כהן",
+    phone_number: "0537778888",
+    email: "daniel@example.com",
+    encrypted_password: "encrypted345", 
+    birth_date: new Date("1995-03-12"),
+    joining_date: new Date("2017-11-22"),
+    monthly_salary: 9200,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 3
+  },
+  {
+    WorkerId: 6,
+    ID_number: "101112131",
+    first_name: "לאה",
+    last_name: "לוי",
+    phone_number: "0511011121",
+    email: "leah@example.com",
+    encrypted_password: "encrypted678", 
+    birth_date: new Date("1989-12-08"),
+    joining_date: new Date("2016-06-30"),
+    monthly_salary: 8100,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 1
+  },
+  {
+    WorkerId: 7,
+    ID_number: "141516171",
+    first_name: "משה",
+    last_name: "כהן",
+    phone_number: "0501415161",
+    email: "moshe@example.com",
+    encrypted_password: "encrypted901", 
+    birth_date: new Date("1991-07-17"),
+    joining_date: new Date("2015-04-12"),
+    monthly_salary: 8700,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 1
+  },
+  {
+    WorkerId: 8,
+    ID_number: "181920212",
+    first_name: "שושנה",
+    last_name: "לוי",
+    phone_number: "0541819202",
+    email: "shoshana@example.com",
+    encrypted_password: "encrypted345",
+    birth_date: new Date("1987-04-28"),
+    joining_date: new Date("2014-09-03"),
+    monthly_salary: 8900,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 2
+  },
+  {
+    WorkerId: 9,
+    ID_number: "222333444",
+    first_name: "איתן",
+    last_name: "כהן",
+    phone_number: "0522223333",
+    email: "eitan@example.com",
+    encrypted_password: "encrypted678",
+    birth_date: new Date("1993-11-02"),
+    joining_date: new Date("2013-12-19"),
+    monthly_salary: 8400,
+    status: "active",
+    position: "מנהל מחלקה",
+    DepartmentId: 2
+	
+  },
+  {
+    WorkerId: 10,
+    ID_number: "555666777",
+    first_name: "מרים",
+    last_name: "לוי",
+    phone_number: "0515556666",
+    email: "miriam@example.com",
+    encrypted_password: "encrypted901",
+    birth_date: new Date("1994-06-09"),
+    joining_date: new Date("2012-08-14"),
+    monthly_salary: 9100,
+    status: "active",
+    position: "עובד מחלקה",
+    DepartmentId: 2
+  }
+]);
+
+
+
+db.Supplier.insertMany([
+  {
+    supplierId: 1,
+    supplier_number: "123456789",
+    name: "ספק 1",
+    phone_number: "0501234567",
+    email: "supplier1@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 2,
+    supplier_number: "987654321",
+    name: "ספק 2",
+    phone_number: "0529876543",
+    email: "supplier2@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 3,
+    supplier_number: "111222333",
+    name: "ספק 3",
+    phone_number: "0541112222",
+    email: "supplier3@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 4,
+    supplier_number: "444555666",
+    name: "ספק 4",
+    phone_number: "0524445555",
+    email: "supplier4@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 5,
+    supplier_number: "777888999",
+    name: "ספק 5",
+    phone_number: "0537778888",
+    email: "supplier5@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 6,
+    supplier_number: "101112131",
+    name: "ספק 6",
+    phone_number: "0511011121",
+    email: "supplier6@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 7,
+    supplier_number: "141516171",
+    name: "ספק 7",
+    phone_number: "0501415161",
+    email: "supplier7@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 8,
+    supplier_number: "181920212",
+    name: "ספק 8",
+    phone_number: "0541819202",
+    email: "supplier8@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 9,
+    supplier_number: "222333444",
+    name: "ספק 9",
+    phone_number: "0522223333",
+    email: "supplier9@example.com",
+    status: "active"
+  },
+  {
+    supplierId: 10,
+    supplier_number: "555666777",
+    name: "ספק 10",
+    phone_number: "0515556666",
+    email: "supplier10@example.com",
+    status: "active"
+  }
+]);
+
+
+
+db.Client.insertMany([
+  {
+    ClientId: 1,
+    Client_name: "לקוח 1",
+    phone_number: "0501234567",
+    email: "client1@example.com",
+    status: "active",
+    location: "תל אביב",
+    address: "רחוב הרצל 1"
+  },
+  {
+    ClientId: 2,
+    Client_name: "לקוח 2",
+    phone_number: "0529876543",
+    email: "client2@example.com",
+    status: "active",
+    location: "ירושלים",
+    address: "רחוב יפו 10"
+  },
+  {
+    ClientId: 3,
+    Client_name: "לקוח 3",
+    phone_number: "0541112222",
+    email: "client3@example.com",
+    status: "active",
+    location: "חיפה",
+    address: "רחוב החורב 5"
+  },
+  {
+    ClientId: 4,
+    Client_name: "לקוח 4",
+    phone_number: "0524445555",
+    email: "client4@example.com",
+    status: "active",
+    location: "באר שבע",
+    address: "רחוב הנגב 20"
+  },
+  {
+    ClientId: 5,
+    Client_name: "לקוח 5",
+    phone_number: "0537778888",
+    email: "client5@example.com",
+    status: "active",
+    location: "אשדוד",
+    address: "רחוב החוף 15"
+  },
+  {
+    ClientId: 6,
+    Client_name: "לקוח 6",
+    phone_number: "0511011121",
+    email: "client6@example.com",
+    status: "active",
+    location: "רחובות",
+    address: "רחוב המשוררים 8"
+  },
+  {
+    ClientId: 7,
+    Client_name: "לקוח 7",
+    phone_number: "0501415161",
+    email: "client7@example.com",
+    status: "active",
+    location: "נתניה",
+    address: "רחוב הנמל 3"
+  },
+  {
+    ClientId: 8,
+    Client_name: "לקוח 8",
+    phone_number: "0541819202",
+    email: "client8@example.com",
+    status: "active",
+    location: "חדרה",
+    address: "רחוב הכינרת 12"
+  },
+  {
+    ClientId: 9,
+    Client_name: "לקוח 9",
+    phone_number: "0522223333",
+    email: "client9@example.com",
+    status: "active",
+    location: "אילת",
+    address: "רחוב האילת 30"
+  },
+  {
+    ClientId: 10,
+    Client_name: "לקוח 10",
+    phone_number: "0515556666",
+    email: "client10@example.com",
+    status: "active",
+    location: "טבריה",
+    address: "רחוב הכנרת 7"
+  }
+]);
+
+
+
+
+db.Package.insertMany([
+  {
+    PackageId: 1,
+    Package_barcode: "123456789",
+    clientId: 1,
+    status: "pending"
+  },
+  {
+    PackageId: 2,
+    Package_barcode: "987654321",
+    clientId: 2,
+    status: "delivered"
+  },
+  {
+    PackageId: 3,
+    Package_barcode: "111222333",
+    clientId: 3,
+    status: "processing"
+  },
+  {
+    PackageId: 4,
+    Package_barcode: "444555666",
+    clientId: 4,
+    status: "pending"
+  },
+  {
+    PackageId: 5,
+    Package_barcode: "777888999",
+    clientId: 5,
+    status: "shipped"
+  },
+  {
+    PackageId: 6,
+    Package_barcode: "101112131",
+    clientId: 6,
+    status: "processing"
+  },
+  {
+    PackageId: 7,
+    Package_barcode: "141516171",
+    clientId: 7,
+    status: "delivered"
+  },
+  {
+    PackageId: 8,
+    Package_barcode: "181920212",
+    clientId: 8,
+    status: "pending"
+  },
+  {
+    PackageId: 9,
+    Package_barcode: "222333444",
+    clientId: 9,
+    status: "shipped"
+  },
+  {
+    PackageId: 10,
+    Package_barcode: "555666777",
+    clientId: 10,
+    status: "processing"
+  }
+]);
