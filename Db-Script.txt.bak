@@ -543,6 +543,16 @@ db.Product.insertMany([
   }
 ]);
 
+db.Product.insertOne({
+  ProductId: 11,
+  name: "מוצר 11",
+  properties: {
+    material: "פלסטיק",
+    country: "ישראל"
+  },
+  related_products: [2, 4, 7]
+});
+
 
 
 db.Stock.insertMany([
@@ -607,7 +617,6 @@ db.Stock.insertMany([
     status: "in stock"
   }
 ]);
-------------------------------------------------------
 
 
 db.Worker.insertMany([
@@ -851,6 +860,8 @@ db.Supplier.insertMany([
 
 
 
+
+
 db.Client.insertMany([
   {
     ClientId: 1,
@@ -945,6 +956,19 @@ db.Client.insertMany([
 ]);
 
 
+db.Client.insert({
+  ClientId: 11,
+  Client_name: "לקוח 11",
+  phone_number: "0501234567",
+  email: "client1@example.com",
+  status: "active",
+  location: "תל אביב",
+  address: "רחוב הרצל 1"
+});
+
+
+
+
 
 
 db.Package.insertMany([
@@ -1011,18 +1035,54 @@ db.Package.insertMany([
 ]);
 
 
-******* Functions *******
+db.Package.insertOne({
+  PackageId: 11,
+  Package_barcode: "123456789",
+  clientId: 1,
+  status: "pending"
+});
+
+
+
+#3)******* Functions Using JSON *******
 
 
 
 
 
-****** Updates *******
+
+
+
+
+#4)**********Search/Retrieve Data**********
+
+
+
+
+
+
+
+
+
+
+
+#5) ****** Updates *******
+
+
+db.Package.updateMany(
+  {},
+  {
+    $set: { status: "shipped" },
+    $push: { status_changes: new Date() }
+  }
+);
+
 
 // Update the name of a warehouse
+
 db.Warehouse.updateOne(
   { WarehouseId: 1 },
-  { $set: { name: "New Warehouse Name" } }
+  { $set: { name: "1 - מחסן היבואים" } }
 );
 
 
@@ -1033,10 +1093,16 @@ db.Department.updateMany(
 );
 
 
+
 // Update the weight of a specific product
 db.Product.updateOne(
   { ProductId: 1 },
   { $set: { weight: 6.0 } }
+);
+
+db.Product.update(
+  { ProductId: 8 }, // Filter to find the specific product
+  { $set: { name: "New Product" } } // Update the name field
 );
 
 
@@ -1086,15 +1152,119 @@ if (worker) {
 }
 
 
+const stockIdToUpdate = 1; 
+const incrementValue = 12;    // The value by which to increment the stock quantity
+
+// Check if the stock exists
+
+const stock = db.Stock.findOne({ StockId: stockIdToUpdate });
+
+if (stock) {
+   // Stock exists, increment the quantity 
+
+  db.Stock.updateOne(
+    { StockId: stockIdToUpdate },
+    {
+      $inc: { quantity: incrementValue }
+    }
+  );
+  print("Stock quantity updated");
+} else {
+  print("Stock not found");
+}
+
 
 *******Deletions********
 
+
+// Replicate Worker collection
+
+function copyCollection(sourceCollection, targetCollection) {
+    var cursor = db.getCollection(sourceCollection).find();
+    while (cursor.hasNext()) {
+        var doc = cursor.next();
+        db.getCollection(targetCollection).insert(doc);
+    }
+    print("Data copied from " + sourceCollection + " to " + targetCollection);
+}
+
+copyCollection("Worker", "Worker_copy");
+
+
+
 // Delete a specific worker
-db.Worker.deleteOne({ WorkerId: 1 });
+db.Worker_copy.deleteOne({ WorkerId: 1 });
+
+
+
+// Drop a collection 
+db.Worker_copy.drop();
+print("Collection dropped: Worker_copy");
 
 
 // Delete all products with a specific category
 db.Product.deleteMany({ category: "קוסמטיקה" });
+
+// remove a product from the Product
+
+db.Product.remove({ ProductId: 8 });
+
+
+
+//מחיקה של אוסף מלא או חלקי על פי קריטריונים רצויים
+db.Package.aggregate([
+  { $match: { status: "shipped" } },
+  { $out: "Package_copy" }
+]);
+
+
+**********Rename**********
+
+//rename collection
+db.Worker.renameCollection("Workers_collection");
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+********** **********
+
+
+
+
+
+
+
+********** **********
+
+
+
 
 
 
