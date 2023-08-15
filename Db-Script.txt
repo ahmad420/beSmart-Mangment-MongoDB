@@ -1,4 +1,6 @@
-beSmart-Mangment-MongoDB
+
+
+#1)beSmart-Mangment-MongoDB
 --------------------------------------
 use beSmart-Mangment
 
@@ -25,7 +27,7 @@ db.createCollection("Client")
 show collections  
 
 
-******Data Inesrtion into collections******
+#2)******Data Inesrtion into collections******
 
 db.Warehouse.insertMany([
   {
@@ -1046,27 +1048,174 @@ db.Package.insertOne({
 
 #3)******* Functions Using JSON *******
 
+const MongoClient = require('mongodb').MongoClient;
+
+// Connection URL
+const url = 'mongodb://localhost:27017';
+
+// Database Name
+const dbName = 'beSmart-Mangment';
+
+// Create a new MongoClient
+const client = new MongoClient(url);
+
+// Connect to the server
+client.connect(function(err) {
+  if (err) {
+    console.error('Error connecting to MongoDB:', err);
+    return;
+  }
+  console.log('Connected to MongoDB server');
+
+  const db = client.db(dbName);
+
+  // Perform operations here
+
+  // Close the connection
+  client.close();
+});
+
+
+
+//Get total count of products in stock
+function getTotalProductCount() {
+  return db.products.count({ quantity: { $gt: 0 } });
+}
+//Test
+var productCount = getTotalProductCount();
+print("Total Product Count:", productCount);
+
+
+// In the client.connect() callback
+const collection = db.collection('Product');
 
 
 
 
 
+// Update multiple documents in the collection
+collection.updateMany(
+  { category: 'קוסמטיקה' },
+  { $set: { price: 20 } },
+  function(err, result) {
+    if (err) {
+      console.error('Error updating documents:', err);
+    } else {
+      console.log('Documents updated:', result.modifiedCount);
+    }
+  }
+);
+
+
+// Insert a document into the collection
+const collection = db.collection('Product');
+
+collection.insertOne({
+  name: 'Product 1',
+  price: 10,
+  quantity: 5,
+  category: 'Electronics'
+}, function(err, result) {
+  if (err) {
+    console.error('Error inserting document:', err);
+  } else {
+    console.log('Document inserted:', result.insertedId);
+  }
+});
+
+
+// add a new worker to your MongoDB collection
+
+
+var mongoClient = new MongoClient("mongodb://localhost:27017");
+var db = mongoClient.getDB("your_database_name");
+var workersCollection = db.getCollection("workers");
+
+// Create a new worker document
+var newWorker = {
+  name: "ישראל כהן",
+  position: "מהנדס תוכנה",
+  department: "הנדסה",
+  salary: 60000
+};
+
+// Insert the new worker document into the collection
+workersCollection.insertOne(newWorker);
+print("New worker added:", newWorker.name);
+
+// Find and update a worker's salary
+var workerToUpdate = workersCollection.findOne({ name: "ישראל כהן" });
+if (workerToUpdate) {
+  var newSalary = workerToUpdate.salary + 10000; // Increase salary by 10,000
+  workersCollection.updateOne(
+    { _id: workerToUpdate._id },
+    { $set: { salary: newSalary } }
+  );
+  print("Updated salary for", workerToUpdate.name, "to", newSalary);
+} else {
+  print("Worker not found");
+}
+
+// Find a worker by name
+var searchName = "ישראל כהן";
+var foundWorker = workersCollection.findOne({ name: searchName });
+if (foundWorker) {
+  print("Found worker:", foundWorker.name, "- Position:", foundWorker.position);
+} else {
+  print("Worker not found");
+}
+
+// Close the MongoDB connection
+mongoClient.close();
 
 
 
 #4)**********Search/Retrieve Data**********
 
+//find query with sorting for the "Product" collection
+var products = db.Product.find({ price: { $gt: 50 } })
+    .sort({ price: 1 })  // Sort by price in ascending order
+    .limit(3)
+    .toArray();
+
+products.forEach(function(document) {
+    printjson(document);
+});
 
 
 
+//documents with max_weight greater than 25, sorted  
+var shelves = db.Shelf.find({ max_weight: { $gt: 25 } })
+    .sort({ max_weight: -1 })
+    .skip(3)
+    .limit(3)
+    .toArray();
+
+shelves.forEach(function(document) {
+    print(document.number);
+});
 
 
 
+// retrieve documents from the "Worker" collection where the "position" is either "עובד מחלקה" or "מנהל מחלקה", and then sort 
+
+var query = {
+    $or: [
+        { position: "עובד מחלקה" },
+        { position: "מנהל מחלקה" }
+    ]
+};
+
+var workers = db.Worker.find(query)
+    .sort({ monthly_salary: -1 })  // Sort by monthly_salary in descending order
+    .toArray();
+
+workers.forEach(function(document) {
+    printjson(document);
+});
 
 
-
-
-#5) ****** Updates *******
+#5.1)****** Updates *******
 
 
 db.Package.updateMany(
@@ -1174,7 +1323,7 @@ if (stock) {
 }
 
 
-*******Deletions********
+#5.2)*******Deletions********
 
 
 // Replicate Worker collection
@@ -1238,46 +1387,182 @@ db.Worker.renameCollection("Workers_collection");
 
 
 
-********** **********
+#6)**********aggregate**********
+
+// Calculate the average of "monthly_salary" for each group
+
+db.Worker.aggregate([
+    {
+        $group: {
+            _id: "$position",  // Group by the "position" field
+            avg_salary: { $avg: "$monthly_salary" }  
+        }
+    },
+    {
+        $sort: {
+            avg_salary: -1  // Sort by average salary in descending order
+        }
+    }
+]);
+
+//display the total sales for each category along with the highest and lowest 
+
+db.Product.aggregate([
+    {
+        $group: {
+            _id: "$category",  // Group by the "category" field
+            total_sales: { $sum: 1 },  // Calculate the total number of products in each category
+            highest_price: { $max: "$price" },  // Calculate the highest price within each category
+            lowest_price: { $min: "$price" }  // Calculate the lowest price within each category
+        }
+    },
+    {
+        $sort: {
+            total_sales: -1  // Sort by total sales in descending order
+        }
+    }
+]);
+
+//retrieve manager names for each department:
+
+db.Department.aggregate([
+    {
+        $group: {
+            _id: "$DepartmentId",
+            departmentName: { $first: "$DepartmentName" },
+            managers: { $addToSet: "$manager" }
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            departmentName: 1,
+            managers: 1
+        }
+    }
+]);
+
+//display the names of workers along with their ages and calculates the average age
+
+db.Worker.aggregate([
+    {
+        $addFields: {
+            age: {
+                $divide: [
+                    { $subtract: [new Date(), "$birth_date"] },
+                    365 * 24 * 60 * 60 * 1000 // Convert milliseconds to years
+                ]
+            }
+        }
+    },
+    {
+        $group: {
+            _id: null,
+            avgAge: { $avg: "$age" },
+            workers: {
+                $push: {
+                    name: { $concat: ["$first_name", " ", "$last_name"] },
+                    age: { $floor: "$age" }
+                }
+            }
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            avgAge: 1,
+            workers: 1
+        }
+    }
+]);
+
+
+
+#7)**********mapReduce**********
+
+//calculate the total quantity of products for each category
+db.Product.mapReduce(
+    function() {
+        emit(this.category, this.quantity);
+    },
+    function(key, values) {
+        return Array.sum(values);
+    },
+    {
+        out: "category_totals"
+    }
+);
+
+//creating a list of worker names along with their ages 
+db.Worker.mapReduce(
+    function() {
+        var birthDate = new Date(this.birth_date);
+        var ageInYears = Math.floor((new Date() - birthDate) / (365 * 24 * 60 * 60 * 1000));
+        emit("workerData", { name: this.first_name + " " + this.last_name, age: ageInYears });
+    },
+    function(key, values) {
+        var totalAge = 0;
+        var count = 0;
+        values.forEach(function(value) {
+            totalAge += value.age;
+            count++;
+        });
+        return { avgAge: totalAge / count, workers: values };
+    },
+    {
+        out: { inline: 1 }
+    }
+);
+
+// calculate the average monthly salary for each department in the Worker collection
+
+// Define the map function
+var mapFunction = function() {
+    emit(this.DepartmentId, { count: 1, totalSalary: this.monthly_salary });
+};
+
+// Define the reduce function
+var reduceFunction = function(key, values) {
+    var result = { count: 0, totalSalary: 0 };
+    
+    values.forEach(function(value) {
+        result.count += value.count;
+        result.totalSalary += value.totalSalary;
+    });
+    
+    return result;
+};
+
+// Define the finalize function
+var finalizeFunction = function(key, reducedValue) {
+    return { 
+        averageSalary: reducedValue.totalSalary / reducedValue.count,
+        totalWorkers: reducedValue.count 
+    };
+};
+
+// Run the mapReduce operation
+db.Worker.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: "department_avg_salary",
+        finalize: finalizeFunction
+    }
+);
+
+// Find and print the results
+db.department_avg_salary.find().forEach(function(doc) {
+    print("DepartmentId: " + doc._id);
+    print("Average Salary: " + doc.value.averageSalary);
+    print("Total Workers: " + doc.value.totalWorkers);
+    print("----------------------------");
+});
 
 
 
 
 
 
-********** **********
 
 
-
-
-
-
-********** **********
-
-
-
-
-
-********** **********
-
-
-
-
-
-
-********** **********
-
-
-
-
-
-
-
-********** **********
-
-
-
-
-
-
-********** **********
